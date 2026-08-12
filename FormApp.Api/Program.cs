@@ -1,3 +1,6 @@
+using FormApp.Api.Models;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -5,6 +8,10 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
+
+string connectionString = builder.Configuration.GetConnectionString
+("Default") ?? throw new ArgumentNullException("connectionString is null");
+builder.Services.AddDbContext<AppDbContext>(op => op.UseSqlite(connectionString));
 
 builder.Services.AddCors(options =>
 {
