@@ -1,0 +1,21 @@
+@base_address = http://localhost:5208/api/order
+
+GET {{base_address}}
+Content-Type: application/json
+
+###
+
+GET {{base_address}}/1
+Content-Type: application/json
+
+###
+
+POST {{base_address}}
+Content-Type: application/json
+
+{
+    "SenderCity":"Novgorod",
+    "RecipientCity": "Moscow",
+    "SenderAddress": "ул. Карла Маркса 55",
+    "RecipientAddress": "ул. Макарова 34/1"
+}

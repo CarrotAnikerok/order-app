@@ -22,11 +22,9 @@ public class Order
     [MaxLength(50)]
     public required string RecipientAddress { get; set; }
 
-    [Required]
-    [MaxLength(50)]
-    public required int Weight { get; set; }
+    // make required
+    public int Weight { get; set; }
 
-    [Required]
-    [MaxLength(50)]
-    public required int Date { get; set; }
+    // make required
+    public int Date { get; set; }
 }
