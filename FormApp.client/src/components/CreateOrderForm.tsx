@@ -10,7 +10,6 @@ export default function CreateOrderForm({ close, submit }: FormProps) {
     const {register, handleSubmit, formState: {errors, isValid, isSubmitting}} = useForm<Order>({mode: 'onChange',});
 
     const submitForm = (data: Order) => {
-        console.log(data);
         submit(data);
         close();
     }

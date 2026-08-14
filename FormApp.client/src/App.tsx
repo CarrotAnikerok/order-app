@@ -42,7 +42,20 @@ function App() {
   const handleSubmit = async (order: Order) => {
     setLoading(true);
     try {
-      setOrders((prevOrders: Order[]) => [...prevOrders, order]);
+      const response = await fetch('/api/order', {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(order)
+      });
+
+      if (!response.ok) {
+        return;
+      }
+
+      const createdOrder = await response.json();
+      setOrders((prevOrders: Order[]) => [...prevOrders, createdOrder]);
     } catch (err) {
       console.log(err);
     } finally {

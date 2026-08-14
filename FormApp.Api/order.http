@@ -17,5 +17,7 @@ Content-Type: application/json
     "SenderCity":"Novgorod",
     "RecipientCity": "Moscow",
     "SenderAddress": "ул. Карла Маркса 55",
-    "RecipientAddress": "ул. Макарова 34/1"
+    "RecipientAddress": "ул. Макарова 34/1",
+    "Weight": 5,
+    "Date": "2026-12-03"
 }
