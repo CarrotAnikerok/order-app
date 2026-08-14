@@ -1,63 +1,54 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react';
 import './App.css'
-
-type WeatherForecast = {
-  date: string
-  temperatureC: number
-  temperatureF: number
-  summary: string
-}
+import CreateOrderForm from './components/CreateOrderForm';
+import Portal from './components/Portal';
+import Modal from './components/Modal';
 
 function App() {
-  const [forecasts, setForecasts] = useState<WeatherForecast[]>([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
+  const [isCreateFormOpen, setCreateFormOpen] = useState(false);
 
-  useEffect(() => {
-    fetch('/WeatherForecast')
-      .then(async response => {
-        if (!response.ok) {
-          throw new Error(`Request failed: ${response.status}`)
-        }
-        const data = (await response.json()) as WeatherForecast[]
-        setForecasts(data)
-      })
+  const headers = [
+    "Sender City", "Sender Address", "Recipient City", 
+    "Recipient Address", "Weight", "Date"
+  ];
 
-      .catch(err => setError(err.message))
-      .finally(() => setLoading(false))
-  }, [])
-
-  if (loading) {
-    return <p>Loading weather data...</p>
+  const open = () => {
+    setCreateFormOpen(true);
+    console.log(`is create form open ${isCreateFormOpen}`);
   }
 
-  if (error) {
-    return <p>Error: {error}</p>
+  const closeModal = () => {
+    setCreateFormOpen(false)
   }
 
   return (
-    <main style={{ padding: 24 }}>
-      <h1>Weather Forecast</h1>
-      <table>
-        <thead>
-          <tr>
-            <th>Date</th>
-            <th>Temp (C)</th>
-            <th>Temp (F)</th>
-            <th>Summary</th>
-          </tr>
-        </thead>
-        <tbody>
-          {forecasts.map(item => (
-            <tr key={item.date}>
-              <td>{item.date}</td>
-              <td>{item.temperatureC}</td>
-              <td>{item.temperatureF}</td>
-              <td>{item.summary}</td>
+    <main className='font-mono'>
+      <header className=' bg-lime-200 flex flex-row justify-between px-10 py-4'>
+        <p>My Orders</p>
+        <button onClick={() => open()}>Make an order</button>
+      </header>
+        <div className='flex justify-center items-center m-3'>
+          <div className='border-pink-400 border-4 rounded-xl p-4'>
+          <table>
+          <thead>
+            <tr>
+              {headers.map((text) => (
+                <th key={text} className='px-6 py-3 text-left'>{text}</th>
+              ))}
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+
+          </tbody>
+        </table>
+        </div>
+      </div>
+
+      <Portal>
+        <Modal isOpen={isCreateFormOpen} close = {closeModal}>
+          <CreateOrderForm close = {closeModal}></CreateOrderForm>
+        </Modal>
+      </Portal>
     </main>
   )
 }
