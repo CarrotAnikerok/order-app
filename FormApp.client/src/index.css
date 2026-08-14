@@ -4,13 +4,17 @@ button:hover {
     @apply text-pink-400 cursor-pointer;
 }
 
+button:disabled {
+  @apply text-gray-300 cursor-not-allowed;
+}
+
 form {
   label {
     @apply flex flex-col gap-1 justify-center items-stretch text-center text-black;
   }
 
   input {
-    @apply bg-white rounded-2xl border-2 border-pink-200 p-1.5 w-52;
+    @apply bg-white rounded-2xl border-2 border-pink-200 p-1.5 ;
   }
 
   input:focus {

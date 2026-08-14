@@ -1,16 +1,34 @@
 import { useState } from 'react';
-import './App.css'
 import CreateOrderForm from './components/CreateOrderForm';
 import Portal from './components/Portal';
 import Modal from './components/Modal';
+import OrderList from './components/OrderList';
+
+export type Order = {
+    number: string,
+    senderCity: string,
+    senderAddress: string,
+    recipientCity: string,
+    recipientAddress: string,
+    weight: number,
+    date: string
+}
 
 function App() {
+  const [loading, setLoading] = useState(false);
   const [isCreateFormOpen, setCreateFormOpen] = useState(false);
-
-  const headers = [
-    "Sender City", "Sender Address", "Recipient City", 
-    "Recipient Address", "Weight", "Date"
-  ];
+  const [orders, setOrders] = useState<Order[]>([
+    {
+      number:'123456', senderCity: 'Moscow', senderAddress: 'st. Kolumkaeva 6', 
+      recipientCity: 'Novosibirsk', recipientAddress: 'st. Karla Marksa',
+      weight: 1000, date: '2025-07-12'
+    },
+    {
+      number:'12s3K56', senderCity: 'Vladivostok', senderAddress: 'st. Kolumkaeva Mister White 6', 
+      recipientCity: 'Novosibirsk', recipientAddress: 'st. Karla Marksa',
+      weight: 300, date: '2026-06-13'
+    }
+  ])  
 
   const open = () => {
     setCreateFormOpen(true);
@@ -21,32 +39,28 @@ function App() {
     setCreateFormOpen(false)
   }
 
+  const handleSubmit = async (order: Order) => {
+    setLoading(true);
+    try {
+      setOrders((prevOrders: Order[]) => [...prevOrders, order]);
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setLoading(false);
+    }
+  }
+
   return (
     <main className='font-mono'>
       <header className=' bg-lime-200 flex flex-row justify-between px-10 py-4'>
-        <p>My Orders</p>
-        <button onClick={() => open()}>Make an order</button>
-      </header>
-        <div className='flex justify-center items-center m-3'>
-          <div className='border-pink-400 border-4 rounded-xl p-4'>
-          <table>
-          <thead>
-            <tr>
-              {headers.map((text) => (
-                <th key={text} className='px-6 py-3 text-left'>{text}</th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-
-          </tbody>
-        </table>
-        </div>
-      </div>
+            <p>My Orders</p>
+            <button onClick={() => open()}>Make an order</button>
+        </header>
+      {loading ? <p>Loading...</p> : <OrderList orderList={orders}></OrderList>}
 
       <Portal>
         <Modal isOpen={isCreateFormOpen} close = {closeModal}>
-          <CreateOrderForm close = {closeModal}></CreateOrderForm>
+          <CreateOrderForm close = {closeModal} submit={handleSubmit}></CreateOrderForm>
         </Modal>
       </Portal>
     </main>
