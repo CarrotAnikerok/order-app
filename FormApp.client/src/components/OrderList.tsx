@@ -1,14 +1,16 @@
 import type { Order } from "../App";
+import Loader from "./Loader";
 
 type OrderListProps = {
     orderList: Order[]
     setOrder: (order: Order) => void
+    isLoading: boolean;
 };
 
-export default function OrderList({orderList, setOrder}: OrderListProps) {
+export default function OrderList({orderList, setOrder, isLoading}: OrderListProps) {
   const headers = [
     "Number", "Sender City", "Sender Address", "Recipient City", 
-    "Recipient Address", "Weight", "Date"
+    "Recipient Address", "Weight (kg)", "Date"
   ];
 
   return (
@@ -20,8 +22,18 @@ export default function OrderList({orderList, setOrder}: OrderListProps) {
                 ))}
                 </tr>
             </thead>
+            {isLoading ? 
+            <tbody>
+                <tr>
+                    <td colSpan={headers.length} className="py-10 text-center">
+                        <div className="flex justify-center items-center w-full">
+                            <Loader />
+                        </div>
+                    </td>
+                </tr>
+            </tbody> :
             <tbody className="divide-y divide-pink-100">
-                {[...orderList].reverse().map(order => 
+                {orderList.map(order => 
                     <tr key={order.number} onClick={() => setOrder(order)} className="hover:bg-lime-100 hover:cursor-pointer">
                         <td className="px-4 py-2 text-sm">{order.number}</td>
                         <td className="px-4 py-2 text-sm">{order.senderCity}</td>
@@ -32,7 +44,7 @@ export default function OrderList({orderList, setOrder}: OrderListProps) {
                         <td className="px-4 py-2 text-sm">{order.date.slice(0, 10)}</td>
                     </tr>
                 )}
-            </tbody>
+            </tbody>}
         </table>
   )
 }

@@ -59,7 +59,7 @@ export default function CreateOrderForm({ close, submit }: FormProps) {
 
             <div className="flex flex-col">
                 <label>
-                    Weight*
+                    Weight (kg)*
                     <input type="number" {...register('weight', { required: true })} />
                 </label>
                 <div className="min-h-5">
@@ -80,7 +80,7 @@ export default function CreateOrderForm({ close, submit }: FormProps) {
             <button 
                 type="submit"  
                 disabled={!isValid || isSubmitting} 
-                className="col-span-2 p-2 mt-4"
+                className="col-span-2"
             >
                 Submit
             </button>

@@ -21,8 +21,9 @@ public class OrderController : ControllerBase
         try
         {
             var ordersQuery = _context.Orders.AsQueryable();
+            var sortedQuery = ordersQuery.OrderByDescending(o => o.Id);
             var pagedQuery = await PagedList<Order>.CreateAsync(
-                ordersQuery, pageParameters.PageNumber, pageParameters.PageSize
+                sortedQuery, pageParameters.PageNumber, pageParameters.PageSize
                 );
             return Ok(pagedQuery);
         }

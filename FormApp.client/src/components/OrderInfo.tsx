@@ -24,7 +24,7 @@ export default function OrderInfo({ order, close }: OrderInfoProps) {
             <p>{order.recipientCity}</p>
             <b>Recipient Address:</b>
             <p>{order.recipientAddress}</p>
-            <b>Weight:</b>
+            <b>Weight (kg):</b>
             <p>{order.weight}</p>
             <b>Date:</b>
             <p>{order.date.slice(0, 10)}</p>

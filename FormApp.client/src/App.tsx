@@ -32,7 +32,7 @@ function App() {
     return queryParams.get('page');
   });
 
-  const limit = useRef<number>(10);
+  const limit = useRef<number>(5);
   const currentPage = parseInt(page || '1', 10);
 
   useEffect(() => {
@@ -41,9 +41,8 @@ function App() {
         if (!response.ok) {
           throw new Error(`Request failed: ${response.status}`)
         }
-        const data = (await response.json());
+        const data = await response.json();
         setOrders(data.items);
-        console.log(`hasNest is ${data.hasNextPage} and hasPrev ${data.hasPreviousPage}`)
         setButtonBlocker({hasNext: data.hasNextPage, hasPrevious: data.hasPreviousPage})
       })
       .catch(err => console.log(err))
@@ -55,11 +54,12 @@ function App() {
   }
 
   const closeModal = () => {
-    setCreateFormOpen(false)
+    setCreateFormOpen(false);
   }
 
   const handleSubmit = async (order: Order) => {
     setLoading(true);
+    
     try {
       const response = await fetch('/api/order', {
         method: "POST",
@@ -74,7 +74,7 @@ function App() {
       }
 
       const createdOrder = await response.json();
-      setOrders((prevOrders: Order[]) => [...prevOrders, createdOrder.items]);
+      setOrders((prevOrders: Order[]) => [...prevOrders, createdOrder]);
     } catch (err) {
       console.log(err);
     } finally {
@@ -89,6 +89,7 @@ function App() {
     window.history.pushState({}, '', newRelativePathQuery);
     setPage(newParams.get('page'));
     setLoading(true);
+    setButtonBlocker({hasNext: false, hasPrevious: false});
   }
 
   return (
@@ -98,17 +99,16 @@ function App() {
             <p>My Orders</p>
             <button onClick={() => open()}>Make an order</button>
         </header>
-      {loading ? <p>Loading...</p> :
         <div className={`flex justify-center items-start transition-all duration-400 ${order ? "gap-5" : "gap-0"}`}>
           <div className={`m-3 mx-auto transition-all duration-400 flex flex-col items-center gap-2`}>
-            <OrderList orderList={orders} setOrder={setOrder}></OrderList>
+            <OrderList orderList={orders} setOrder={setOrder} isLoading={loading}></OrderList>
             <Pagination currentPage={Number(page)} changePage={changePage} buttonBlocker={buttonBlocker}></Pagination>
           </div>
           <div className={`transition-all duration-400 overflow-auto ${order ? "w-md ml-auto" : "w-0"}`}>
             {order ? <OrderInfo order={order} close={() => setOrder(null)}></OrderInfo> : null}
           </div>
         </div>
-      }
+      
 
       <Portal>
         <Modal isOpen={isCreateFormOpen} close = {closeModal}>
@@ -120,7 +120,8 @@ function App() {
     <footer className='bg-lime-100'>
       <div className='flex'>
         <p className='flex-1 p-3 text-sm'>A little fullstack order app with usage of .NET 10, React and SQLite</p>
-        <p className='flex-1 text-right p-3'>© 2026 Anikerok</p>
+        <p className='flex-1 text-right p-3'>© 2026 <a href='https://github.com/CarrotAnikerok' target="_blank" rel="noreferrer" className='text-pink-400'>Anikerok</a>
+        </p>
       </div>
     </footer>
     </div>

@@ -19,10 +19,10 @@ POST {{base_address}}
 Content-Type: application/json
 
 {
-    "SenderCity":"Novgorod",
-    "RecipientCity": "Moscow",
-    "SenderAddress": "ул. Карла Маркса 55",
-    "RecipientAddress": "ул. Макарова 34/1",
-    "Weight": 5,
-    "Date": "2026-12-03"
+    "SenderCity":"Москва",
+    "RecipientCity": "Магнитогорск",
+    "SenderAddress": "ул. Арцеулловская 4",
+    "RecipientAddress": "ул. Пяточника 134",
+    "Weight": 5000,
+    "Date": "2025-10-05"
 }
