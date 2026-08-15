@@ -1,9 +1,10 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import CreateOrderForm from './components/CreateOrderForm';
 import Portal from './components/Portal';
 import Modal from './components/Modal';
 import OrderList from './components/OrderList';
 import OrderInfo from './components/OrderInfo';
+import Pagination from './components/Pagination';
 
 export type Order = {
     number: string,
@@ -15,24 +16,39 @@ export type Order = {
     date: string
 }
 
+export type ButtonBlocker = {
+  hasNext: boolean;
+  hasPrevious: boolean;
+}
+
 function App() {
   const [loading, setLoading] = useState(true);
   const [isCreateFormOpen, setCreateFormOpen] = useState(false);
   const [order, setOrder] = useState<Order|null>(null);
   const [orders, setOrders] = useState<Order[]>([]);
+  const [buttonBlocker, setButtonBlocker] = useState<ButtonBlocker>({hasNext: false, hasPrevious: false});
+  const [page, setPage] = useState(() => {
+    const queryParams = new URLSearchParams(window.location.search);
+    return queryParams.get('page');
+  });
+
+  const limit = useRef<number>(10);
+  const currentPage = parseInt(page || '1', 10);
 
   useEffect(() => {
-    fetch('/api/order')
+    fetch(`/api/order?pageSize=${limit.current}&pageNumber=${currentPage}`)
       .then(async response => {
         if (!response.ok) {
           throw new Error(`Request failed: ${response.status}`)
         }
-        const data = (await response.json()) as Order[];
-        setOrders(data);
+        const data = (await response.json());
+        setOrders(data.items);
+        console.log(`hasNest is ${data.hasNextPage} and hasPrev ${data.hasPreviousPage}`)
+        setButtonBlocker({hasNext: data.hasNextPage, hasPrevious: data.hasPreviousPage})
       })
       .catch(err => console.log(err))
       .finally(() => setLoading(false))
-  }, [])
+  }, [currentPage])
 
   const open = () => {
     setCreateFormOpen(true);
@@ -58,7 +74,7 @@ function App() {
       }
 
       const createdOrder = await response.json();
-      setOrders((prevOrders: Order[]) => [...prevOrders, createdOrder]);
+      setOrders((prevOrders: Order[]) => [...prevOrders, createdOrder.items]);
     } catch (err) {
       console.log(err);
     } finally {
@@ -66,8 +82,13 @@ function App() {
     }
   }
 
-  const closeOrder = () => {
-    setOrder(null);
+  const changePage = (newPage: number) => {
+    const newParams = new URLSearchParams();
+    newParams.set('page', String(newPage));
+    const newRelativePathQuery = `/?${newParams.toString()}`;
+    window.history.pushState({}, '', newRelativePathQuery);
+    setPage(newParams.get('page'));
+    setLoading(true);
   }
 
   return (
@@ -79,11 +100,12 @@ function App() {
         </header>
       {loading ? <p>Loading...</p> :
         <div className={`flex justify-center items-start transition-all duration-400 ${order ? "gap-5" : "gap-0"}`}>
-          <div className={`m-3 mx-auto transition-all duration-400`}>
+          <div className={`m-3 mx-auto transition-all duration-400 flex flex-col items-center gap-2`}>
             <OrderList orderList={orders} setOrder={setOrder}></OrderList>
+            <Pagination currentPage={Number(page)} changePage={changePage} buttonBlocker={buttonBlocker}></Pagination>
           </div>
           <div className={`transition-all duration-400 overflow-auto ${order ? "w-md ml-auto" : "w-0"}`}>
-            {order ? <OrderInfo order={order} close={closeOrder}></OrderInfo> : null}
+            {order ? <OrderInfo order={order} close={() => setOrder(null)}></OrderInfo> : null}
           </div>
         </div>
       }

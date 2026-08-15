@@ -10,6 +10,11 @@ Content-Type: application/json
 
 ###
 
+GET {{base_address}}?pageSize=3&pageNumber=0
+Content-Type: application/json
+
+###
+
 POST {{base_address}}
 Content-Type: application/json
 

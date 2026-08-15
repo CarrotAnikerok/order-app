@@ -16,12 +16,15 @@ public class OrderController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetOrders()
+    public async Task<IActionResult> GetOrders([FromQuery] PageParameters pageParameters)
     {
         try
         {
-            var orders = await _context.Orders.ToListAsync();
-            return Ok(orders);
+            var ordersQuery = _context.Orders.AsQueryable();
+            var pagedQuery = await PagedList<Order>.CreateAsync(
+                ordersQuery, pageParameters.PageNumber, pageParameters.PageSize
+                );
+            return Ok(pagedQuery);
         }
         catch (Exception ex)
         {
