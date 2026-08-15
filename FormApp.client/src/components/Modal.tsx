@@ -1,4 +1,4 @@
-import { useEffect, type ReactNode } from 'react';
+import { useEffect, type ReactNode } from "react";
 
 type ModalProps = {
   children?: ReactNode;
@@ -7,15 +7,15 @@ type ModalProps = {
 };
 
 function HandleKey(event: KeyboardEvent, close: () => void) {
-  if (event.key === 'Escape') {
+  if (event.key === "Escape") {
     close();
   }
 
-  if (event.key !== 'Tab') {
+  if (event.key !== "Tab") {
     return;
   }
 
-  const modal = document.querySelector('.modal-content');
+  const modal = document.querySelector(".modal-content");
 
   if (!modal) {
     return;
@@ -24,7 +24,7 @@ function HandleKey(event: KeyboardEvent, close: () => void) {
   const focusableSelectors =
     'a[href], area[href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), button:not([disabled]), [tabindex="0"]';
   const focusableElements: HTMLElement[] = Array.from(
-    modal.querySelectorAll(focusableSelectors)
+    modal.querySelectorAll(focusableSelectors),
   );
 
   const firstElement = focusableElements[0];
@@ -47,9 +47,9 @@ export default function Modal({ children, isOpen, close }: ModalProps) {
   useEffect(() => {
     const onKey = (event: KeyboardEvent) => HandleKey(event, close);
 
-    document.body.addEventListener('keydown', onKey);
+    document.body.addEventListener("keydown", onKey);
     return () => {
-      document.body.removeEventListener('keydown', onKey);
+      document.body.removeEventListener("keydown", onKey);
     };
   }, [close]);
 
@@ -64,7 +64,10 @@ export default function Modal({ children, isOpen, close }: ModalProps) {
   }
 
   return (
-    <div className="fixed z-50 flex items-center justify-center px-40 py-20 inset-0 bg-black/70" onClick={closeOnOutsideClick}>
+    <div
+      className="fixed z-50 flex items-center justify-center px-40 py-20 inset-0 bg-black/70"
+      onClick={closeOnOutsideClick}
+    >
       <div
         className="relative m-auto bg-lime-50 rounded-2xl p-8"
         role="dialog"

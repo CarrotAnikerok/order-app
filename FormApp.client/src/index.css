@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 button:hover {
-    @apply text-pink-400 cursor-pointer;
+  @apply text-pink-400 cursor-pointer;
 }
 
 button:disabled {
@@ -14,10 +14,10 @@ form {
   }
 
   input {
-    @apply bg-white rounded-2xl border-2 border-pink-200 p-1.5 ;
+    @apply bg-white rounded-2xl border-2 border-pink-200 p-1.5;
   }
 
   input:focus {
-    @apply outline-0 border-pink-300
+    @apply outline-0 border-pink-300;
   }
 }

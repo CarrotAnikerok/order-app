@@ -9,7 +9,7 @@ type PaginationProps = {
 export default function Pagination({
   currentPage,
   changePage,
-  buttonBlocker
+  buttonBlocker,
 }: PaginationProps) {
   const handleBack = () => {
     changePage(currentPage - 1);
