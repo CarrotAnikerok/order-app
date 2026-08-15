@@ -36,7 +36,6 @@ function App() {
 
   const open = () => {
     setCreateFormOpen(true);
-    console.log(`is create form open ${isCreateFormOpen}`);
   }
 
   const closeModal = () => {
@@ -72,7 +71,8 @@ function App() {
   }
 
   return (
-    <main className='font-mono'>
+    <div className='font-mono flex flex-col min-h-screen'>
+      <main className='grow'>
       <header className=' bg-lime-200 flex flex-row justify-between px-10 py-4'>
             <p>My Orders</p>
             <button onClick={() => open()}>Make an order</button>
@@ -94,6 +94,14 @@ function App() {
         </Modal>
       </Portal>
     </main>
+
+    <footer className='bg-lime-100'>
+      <div className='flex'>
+        <p className='flex-1 p-3 text-sm'>A little fullstack order app with usage of .NET 10, React and SQLite</p>
+        <p className='flex-1 text-right p-3'>© 2026 Anikerok</p>
+      </div>
+    </footer>
+    </div>
   )
 }
 

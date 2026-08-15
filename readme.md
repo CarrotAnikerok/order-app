@@ -4,8 +4,16 @@
 * Установленный **.NET 10 SDK**
 * Установленный **Node.js**
 
+### Загрузка
+Загрузите проект и перейдите в корневую папу:
+
+```bash
+git clone https://github.com/CarrotAnikerok/order-app.git
+cd order-app
+```
+
 ### Шаг 1: Запуск бэкенда (API)
-Перейдите в корень проекта и выполните команды:
+Выполните команды:
 ```bash
 dotnet restore
 dotnet run --project FormApp.Api
