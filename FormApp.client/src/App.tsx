@@ -3,6 +3,7 @@ import CreateOrderForm from './components/CreateOrderForm';
 import Portal from './components/Portal';
 import Modal from './components/Modal';
 import OrderList from './components/OrderList';
+import OrderInfo from './components/OrderInfo';
 
 export type Order = {
     number: string,
@@ -17,6 +18,7 @@ export type Order = {
 function App() {
   const [loading, setLoading] = useState(false);
   const [isCreateFormOpen, setCreateFormOpen] = useState(false);
+  const [order, setOrder] = useState<Order|null>(null);
   const [orders, setOrders] = useState<Order[]>([
     {
       number:'123456', senderCity: 'Moscow', senderAddress: 'st. Kolumkaeva 6', 
@@ -63,13 +65,26 @@ function App() {
     }
   }
 
+  const closeOrder = () => {
+    setOrder(null);
+  }
+
   return (
     <main className='font-mono'>
       <header className=' bg-lime-200 flex flex-row justify-between px-10 py-4'>
             <p>My Orders</p>
             <button onClick={() => open()}>Make an order</button>
         </header>
-      {loading ? <p>Loading...</p> : <OrderList orderList={orders}></OrderList>}
+      {loading ? <p>Loading...</p> :
+        <div className={`flex justify-center items-start transition-all duration-300 ${order ? "gap-5" : "gap-0"}`}>
+          <div className={`my-3 mx-auto transition-all duration-300`}>
+            <OrderList orderList={orders} setOrder={setOrder}></OrderList>
+          </div>
+          <div className={`transition-all duration-300 overflow-auto ${order ? "min-w-1/3 ml-auto" : "w-0"}`}>
+            {order ? <OrderInfo order={order} close={closeOrder}></OrderInfo> : null}
+          </div>
+        </div>
+      }
 
       <Portal>
         <Modal isOpen={isCreateFormOpen} close = {closeModal}>
