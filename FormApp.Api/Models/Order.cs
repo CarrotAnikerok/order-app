@@ -22,5 +22,5 @@ public class Order
     public required int Weight { get; set; }
 
     [Required]
-    public required string Date { get; set; }
+    public required DateTime Date { get; set; }
 }

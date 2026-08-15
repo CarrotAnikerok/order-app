@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import CreateOrderForm from './components/CreateOrderForm';
 import Portal from './components/Portal';
 import Modal from './components/Modal';
@@ -16,21 +16,23 @@ export type Order = {
 }
 
 function App() {
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [isCreateFormOpen, setCreateFormOpen] = useState(false);
   const [order, setOrder] = useState<Order|null>(null);
-  const [orders, setOrders] = useState<Order[]>([
-    {
-      number:'123456', senderCity: 'Moscow', senderAddress: 'st. Kolumkaeva 6', 
-      recipientCity: 'Novosibirsk', recipientAddress: 'st. Karla Marksa',
-      weight: 1000, date: '2025-07-12'
-    },
-    {
-      number:'12s3K56', senderCity: 'Vladivostok', senderAddress: 'st. Kolumkaeva Mister White 6', 
-      recipientCity: 'Novosibirsk', recipientAddress: 'st. Karla Marksa',
-      weight: 300, date: '2026-06-13'
-    }
-  ])  
+  const [orders, setOrders] = useState<Order[]>([]);
+
+  useEffect(() => {
+    fetch('/api/order')
+      .then(async response => {
+        if (!response.ok) {
+          throw new Error(`Request failed: ${response.status}`)
+        }
+        const data = (await response.json()) as Order[];
+        setOrders(data);
+      })
+      .catch(err => console.log(err))
+      .finally(() => setLoading(false))
+  }, [])
 
   const open = () => {
     setCreateFormOpen(true);
@@ -53,7 +55,7 @@ function App() {
       });
 
       if (!response.ok) {
-        return;
+        throw new Error(`Request failed: ${response.status}`)
       }
 
       const createdOrder = await response.json();
@@ -76,11 +78,11 @@ function App() {
             <button onClick={() => open()}>Make an order</button>
         </header>
       {loading ? <p>Loading...</p> :
-        <div className={`flex justify-center items-start transition-all duration-300 ${order ? "gap-5" : "gap-0"}`}>
-          <div className={`my-3 mx-auto transition-all duration-300`}>
+        <div className={`flex justify-center items-start transition-all duration-400 ${order ? "gap-5" : "gap-0"}`}>
+          <div className={`m-3 mx-auto transition-all duration-400`}>
             <OrderList orderList={orders} setOrder={setOrder}></OrderList>
           </div>
-          <div className={`transition-all duration-300 overflow-auto ${order ? "min-w-1/3 ml-auto" : "w-0"}`}>
+          <div className={`transition-all duration-400 overflow-auto ${order ? "w-md ml-auto" : "w-0"}`}>
             {order ? <OrderInfo order={order} close={closeOrder}></OrderInfo> : null}
           </div>
         </div>

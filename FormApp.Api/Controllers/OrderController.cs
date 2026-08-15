@@ -50,10 +50,16 @@ public class OrderController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> AddOrder(Order order)
+    public async Task<IActionResult> AddOrder([FromBody] Order order)
     {
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
+        }
+
         try
         {
+            order.Number = Guid.NewGuid().ToString().Replace("-","")[..8];
             _context.Orders.Add(order);
             await _context.SaveChangesAsync();
             return CreatedAtRoute("GetOrder", new{id = order.Id}, order);

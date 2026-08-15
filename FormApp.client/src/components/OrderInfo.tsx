@@ -15,10 +15,10 @@ export default function OrderInfo({ order, close }: OrderInfoProps) {
             <h2 className="text-3xl">{order.number}</h2>
             <button className='ml-auto' onClick={close}>close</button>
         </div>
-        <div className=' grid grid-cols-2 gap-y-2 p-5'>
+        <div className='grid grid-cols-2 gap-y-2 p-5'>
             <b>Sender City:</b>
             <p>{order.senderCity}</p>
-            <b>Sender Address</b>
+            <b>Sender Address:</b>
             <p>{order.senderAddress}</p>
             <b>Recipient City:</b>
             <p>{order.recipientCity}</p>
@@ -27,7 +27,7 @@ export default function OrderInfo({ order, close }: OrderInfoProps) {
             <b>Weight:</b>
             <p>{order.weight}</p>
             <b>Date:</b>
-            <p>{order.date}</p>
+            <p>{order.date.slice(0, 10)}</p>
         </div>
     </div>
   )
